@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 
-	"name": "GTmetrix Analyzer Plugin",
+	"name": "Wikipedia Context Helper",
 	"description": "This extension will analyze a page using GTmetrix",
 	"version": "1.0",
 
@@ -9,9 +9,14 @@
 		"default_icon": "icon.png"
 	},
 	
+	"background": {
+		"scripts": ["background.js"]
+	},
+	
 	"content_scripts": [
 		{
 			"matches": ["https://en.wikipedia.org/*"],
+			"css": ["popup.css"],
 			"js": ["popup.js"],
 			"run_at": "document_end"
 		}

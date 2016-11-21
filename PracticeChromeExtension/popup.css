@@ -1,0 +1,8 @@
+.extension {
+	width: 650px;
+    background-color: lightblue;
+    height: 100%;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
