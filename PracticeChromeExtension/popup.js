@@ -14,9 +14,13 @@ ext.id = "extension";
 ext.className = "extension";
 var kGraph = document.createElement("div");
 ext.appendChild(kGraph);
-kGraph.id = "knowledgeGraph";
-kGraph.className = "knowledgeGraph";
-kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="650" height="480" />';
+kGraph.id = "knowledge-graph";
+kGraph.className = "knowledge-graph";
+kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="610" height="420" />';
+var anno = document.createElement("div");
+ext.appendChild(anno);
+anno.id = "annotations";
+anno.className = "annotations";
 
 pageInformation.title = document.getElementById('firstHeading').innerHTML;
 pageInformation.url = window.location.href;

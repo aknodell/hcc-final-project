@@ -1,17 +1,26 @@
 .extension {
 	width: 650px;
-    background-color: lightblue;
+    background-color: white;
     height: 100%;
     position: fixed;
     top: 0px;
     right: 0px;
+    border-left: 1px solid #a7d7f9;
 }
 
+.knowledge-graph {
+    margin-left: 20px;
+}
+
+.annotations {
+    margin-left: 20px;
+    margin-top: 0.25em;
+}
 .current-node {
     color: white !important;
 }
 
 .canvas {
-    background-color: lightgrey;
-
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.25em;
 }
