@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 
 	"name": "Wikipedia Context Helper",
-	"description": "This extension will analyze a page using GTmetrix",
+	"description": "This will help with context in wikipedia",
 	"version": "1.0",
 
 	"browser_action": {
@@ -10,14 +10,14 @@
 	},
 	
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": ["jquery.min.js", "springy.js", "springyui.js", "background.js"]
 	},
 	
 	"content_scripts": [
 		{
 			"matches": ["https://en.wikipedia.org/*"],
 			"css": ["popup.css"],
-			"js": ["popup.js"],
+			"js": ["jquery.min.js", "springy.js", "springyui.js", "popup.js"],
 			"run_at": "document_end"
 		}
 	]

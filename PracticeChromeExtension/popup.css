@@ -6,3 +6,12 @@
     top: 0px;
     right: 0px;
 }
+
+.current-node {
+    color: white !important;
+}
+
+.canvas {
+    background-color: lightgrey;
+
+}
