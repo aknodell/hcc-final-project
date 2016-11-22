@@ -125,7 +125,7 @@ jQuery.fn.springy = function(params) {
 	});
 
 	var getTextWidth = function(node) {
-		var text = (node.data.label !== undefined) ? node.data.label : node.id;
+		var text = (node.data.label !== undefined) ? strip(node.data.label) : node.id;
 		if (node._width && node._width[text])
 			return node._width[text];
 
@@ -325,7 +325,7 @@ jQuery.fn.springy = function(params) {
 				ctx.textBaseline = "top";
 				ctx.font = (node.data.font !== undefined) ? node.data.font : nodeFont;
 				ctx.fillStyle = (node.data.color !== undefined) ? node.data.color : "#000000";
-				var text = (node.data.label !== undefined) ? node.data.label : node.id;
+				var text = (node.data.label !== undefined) ? strip(node.data.label) : node.id;
 				ctx.fillText(text, s.x - contentWidth/2, s.y - contentHeight/2);
 			} else {
 				// Currently we just ignore any labels if the image object is set. One might want to extend this logic to allow for both, or other composite nodes.
@@ -387,6 +387,13 @@ jQuery.fn.springy = function(params) {
 
 		return false;
 	}
+    
+    function strip(html)
+    {
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    }
 
 	return this;
 }

@@ -10,7 +10,7 @@
 	},
 	
 	"background": {
-		"scripts": ["jquery.min.js", "springy.js", "springyui.js", "background.js"]
+		"scripts": ["springy.js", "background.js"]
 	},
 	
 	"content_scripts": [

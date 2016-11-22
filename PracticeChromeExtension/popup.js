@@ -1,11 +1,13 @@
 var width = '650px'
 
-document.getElementById('p-personal').style.setProperty("padding-right",width,"important");
-document.getElementById('mw-head').style.setProperty("padding-right",width,"important");
-document.getElementById('content').style.setProperty("padding-right",width,"important");
-document.getElementById('content').style.setProperty("margin-right",'1em',"important");
-document.getElementById('footer').style.setProperty("padding-right",width,"important");
-document.getElementById('footer').style.setProperty("margin-right",'1em',"important");
+var paddingElems = ['p-personal', 'mw-head', 'content', 'footer'];
+var marginElems = ['content', 'footer'];
+
+for (elem in paddingElems)
+    document.getElementById(paddingElems[elem]).style.setProperty("padding-right",width,"important");
+    
+for (elem in marginElems)
+    document.getElementById(marginElems[elem]).style.setProperty("margin-right",'1em',"important");
 
 var pageInformation = {title:"", url:""};
 var ext = document.createElement("div");
