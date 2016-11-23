@@ -17,6 +17,25 @@
     margin-left: 20px;
     margin-top: 0.25em;
 }
+
+.add-annotation {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+.add-annotation:hover {
+    cursor: pointer;
+}
+
 .current-node {
     color: white !important;
 }
