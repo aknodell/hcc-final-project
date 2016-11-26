@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(
         }
         else if (request.message == "addAnnotation")
         {
-            annotations[request.key].push({text:request.annotate, note:"some note"});
+            annotations[request.key].push({quote:request.quote, note:request.note});
             sendResponse({message:"success", annos:annotations[request.key]});
         }
 });

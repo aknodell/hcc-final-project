@@ -4,42 +4,20 @@ annoText = "";
 var paddingElems = ['p-personal', 'mw-head', 'content', 'footer'];
 var marginElems = ['content', 'footer'];
 
-for (elem in paddingElems)
-    document.getElementById(paddingElems[elem]).style.setProperty("padding-right",width,"important");
-    
-for (elem in marginElems)
-    document.getElementById(marginElems[elem]).style.setProperty("margin-right",'1em',"important");
-
 var pageInformation = {title:"", url:""};
 
 var ext = document.createElement("div");
-document.body.appendChild(ext);
-ext.id = "extension";
-ext.className = "extension";
-
 var kGraph = document.createElement("div");
-ext.appendChild(kGraph);
-kGraph.id = "knowledge-graph";
-kGraph.className = "knowledge-graph";
-kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="610" height="420" />';
-
 var anno = document.createElement("div");
-ext.appendChild(anno);
-anno.id = "annotations";
-anno.className = "annotations";
-
+var addNoteDiv = document.createElement("div");
+var noteTextarea = document.createElement("textarea");
+var saveNoteBtn = document.createElement("span");
+var clearNoteBtn = document.createElement("span");
 var addAnnotationSpan = document.createElement("span");
-addAnnotationSpan.id = "add-annotation";
-addAnnotationSpan.className = "add-annotation";
-addAnnotationSpan.innerHTML = "Add Annotation";
-addAnnotationSpan.onclick = function() { addAnnotation() };
-
-document.body.appendChild(addAnnotationSpan);
-
-pageInformation.title = document.getElementById('firstHeading').innerHTML;
-pageInformation.url = window.location.href;
 
 window.onload = function() {
+    buildExtension();
+    
     chrome.runtime.sendMessage({message:"load", pageInformation: JSON.stringify(pageInformation)}, function(response) {
         var graph = new Springy.Graph();
         
@@ -59,20 +37,14 @@ window.onload = function() {
         }
         
         for (i = 0; i < response.anns.length; i++) {
-            var newAnnotation = document.createElement("div");
-            var par = document.createElement("p");
-            par.innerHTML = response.anns[i].text;
-            newAnnotation.appendChild(par);
-            anno.appendChild(par);              
+            addAnnotationDiv(response.anns[i].quote, response.anns[i].note);
         }
         
-        console.log(response.anns);
-
         jQuery(function(){
           var springy = window.springy = jQuery('#springydemo').springy({
             graph: graph,
             nodeSelected: function(node){
-              // console.log(node.data.url);
+                
             }
           });
         });    
@@ -80,30 +52,133 @@ window.onload = function() {
 }
 
 document.onmouseup = function(event) {
-    if (addAnnotationSpan.style.visibility == "visible") {
-        addAnnotationSpan.style.visibility = "hidden";
-    } else {
-        window.annoText = getSelectionText();
-        if (window.annoText != "") {
-            addAnnotationSpan.style.visibility = "visible";
-            addAnnotationSpan.style.top = event.pageY + "px";
-            addAnnotationSpan.style.left = event.pageX + "px";
-        }        
+    if (window.innerWidth - event.pageX > 650) {
+        if (addAnnotationSpan.style.visibility == "visible") {
+            if (getSelectionText() == "") {
+                addAnnotationSpan.style.visibility = "hidden";
+            } else {
+                window.annoText = getSelectionText();
+                addAnnotationSpan.style.top = (event.pageY-40) + "px";
+                addAnnotationSpan.style.left = (event.pageX-60) + "px";            
+            }
+        } else {
+            window.annoText = getSelectionText();
+            if (window.annoText != "") {
+                addAnnotationSpan.style.visibility = "visible";
+                addAnnotationSpan.style.top = (event.pageY-40) + "px";
+                addAnnotationSpan.style.left = (event.pageX-60) + "px";
+            }        
+        }
     }
 };
 
-function addAnnotation() {
-   if (window.annoText != "") {
-        var newAnnotation = document.createElement("div");
-        var par = document.createElement("p");
-        par.innerHTML = window.annoText;
-        newAnnotation.appendChild(par);
-        anno.appendChild(par);
+function buildExtension() {
+    for (elem in paddingElems)
+        document.getElementById(paddingElems[elem]).style.setProperty("padding-right",width,"important");
+    
+    for (elem in marginElems)
+        document.getElementById(marginElems[elem]).style.setProperty("margin-right",'1em',"important");
+    
+    document.body.appendChild(ext);
+    ext.id = "extension";
+    ext.className = "extension";
+
+    ext.appendChild(kGraph);
+    kGraph.id = "knowledge-graph";
+    kGraph.className = "knowledge-graph";
+    kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="610" height="420" />';
+
+    ext.appendChild(anno);
+    anno.id = "annotations";
+    anno.className = "annotations";
+
+    addNoteDiv.className = "add-note-container";
+    anno.appendChild(addNoteDiv);
         
-        chrome.runtime.sendMessage({message:"addAnnotation", annotate:window.annoText, key:pageInformation.title}, function(response) {
-            console.log(response);
+    noteTextarea.className = "note-ta";
+    addNoteDiv.appendChild(noteTextarea);
+
+    saveNoteBtn.className = "btn";
+    saveNoteBtn.innerHTML = "Save";
+    saveNoteBtn.onclick = function() { addNote(); };
+    addNoteDiv.appendChild(saveNoteBtn);
+
+    clearNoteBtn.className = "btn";
+    clearNoteBtn.innerHTML = "Clear";
+    clearNoteBtn.onclick = function() { clearNote(); };
+    addNoteDiv.appendChild(clearNoteBtn);
+
+    addAnnotationSpan.id = "add-annotation";
+    addAnnotationSpan.className = "add-annotation";
+    addAnnotationSpan.innerHTML = "Add Annotation";
+    addAnnotationSpan.onclick = function() { addAnnotation() };
+
+    document.body.appendChild(addAnnotationSpan);
+
+    pageInformation.title = document.getElementById('firstHeading').innerHTML;
+    pageInformation.url = window.location.href;
+}
+
+function addNote() {
+    saveAnnotation("", noteTextarea.value);
+    clearNote();
+}
+
+function addAnnotation() {
+    if (window.annoText.trim() != "") {
+        var newAnnotation = document.createElement("div");
+        var quoteP = document.createElement("p");
+        var noteTa = document.createElement("textarea");
+        var saveBtn = document.createElement("span");
+        var cancelBtn = document.createElement("span");
+
+        newAnnotation.className = "annotation";
+        // newAnnotation.style.textAlign = "right";
+        
+        if (window.annoText.trim() != "")
+            quoteP.innerHTML = '\"' + window.annoText.trim() + '\"';
+        newAnnotation.appendChild(quoteP);
+        
+        noteTa.className = "note-ta";
+        noteTa.style.width = "597px";
+        newAnnotation.appendChild(noteTa);
+
+        
+        saveBtn.className = "btn";
+        saveBtn.style.marginLeft = "501px";
+        saveBtn.innerHTML = "Save";
+        saveBtn.onclick = function() { 
+            saveAnnotation(window.annoText.trim(), noteTa.value.trim()); 
+            newAnnotation.parentNode.removeChild(newAnnotation);
+        };
+        newAnnotation.appendChild(saveBtn);
+
+        cancelBtn.className = "btn";
+        cancelBtn.innerHTML = "Cancel";
+        cancelBtn.onclick = function() { 
+            newAnnotation.parentNode.removeChild(newAnnotation); 
+        };
+        newAnnotation.appendChild(cancelBtn);
+        
+        anno.appendChild(newAnnotation);
+    }
+}
+
+function saveAnnotation(quoteText, noteText) {
+    addAnnotationSpan.style.visibility = "hidden";
+
+    if ((quoteText.trim() != "")||(noteText.trim() != "")) {
+        
+        chrome.runtime.sendMessage({message:"addAnnotation", quote:quoteText, note:noteText, key:pageInformation.title}, function(response) {
+            if (response.message != "success") {
+                alert("Error saving annotation");
+            } else {
+                 addAnnotationDiv(quoteText.trim(), noteText.trim());
+            }
         });
     }
+
+    window.annoText = "";
 }
 
 function getSelectionText() {
@@ -116,4 +191,23 @@ function getSelectionText() {
     return selText;
 }
 
+function addAnnotationDiv(quote, note) {
+    var newAnnotation = document.createElement("div");
+    newAnnotation.className = "annotation";
+    
+    var quoteP = document.createElement("p");
+    if (quote.trim() != "")
+        quoteP.innerHTML = '\"' + quote + '\"';
+    newAnnotation.appendChild(quoteP);
+    
+    var noteP = document.createElement("p");
+    if (note.trim() != "")
+        noteP.innerHTML = "— " + note;
+    newAnnotation.appendChild(noteP);
+    
+    anno.appendChild(newAnnotation);    
+}
 
+function clearNote() {
+    noteTextarea.value = "";
+}
