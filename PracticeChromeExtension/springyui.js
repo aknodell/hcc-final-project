@@ -27,7 +27,7 @@ Copyright (c) 2010 Dennis Hotson
 
 jQuery.fn.springy = function(params) {
 	var graph = this.graph = params.graph || new Springy.Graph();
-	var nodeFont = "16px Verdana, sans-serif";
+	var nodeFont = "12px Verdana, sans-serif";
 	var edgeFont = "8px Verdana, sans-serif";
 	var stiffness = params.stiffness || 400.0;
 	var repulsion = params.repulsion || 400.0;
@@ -207,7 +207,7 @@ jQuery.fn.springy = function(params) {
 			}
 
 			//change default to  10.0 to allow text fit between edges
-			var spacing = 12.0;
+			var spacing = 0;
 
 			// Figure out how far off center the line should be drawn
 			var offset = normal.multiply(-((total - 1) * spacing)/2.0 + (n * spacing));
@@ -232,7 +232,7 @@ jQuery.fn.springy = function(params) {
 			var arrowWidth;
 			var arrowLength;
 
-			var weight = (edge.data.weight !== undefined) ? edge.data.weight : 1.0;
+			var weight = (edge.data.weight !== undefined) ? edge.data.weight : 0.5;
 
 			ctx.lineWidth = Math.max(weight *  2, 0.1);
 			arrowWidth = 1 + ctx.lineWidth;
@@ -312,9 +312,9 @@ jQuery.fn.springy = function(params) {
 
 			// fill background
 			if (selected !== null && selected.node !== null && selected.node.id === node.id) {
-				ctx.fillStyle = "#FFFFE0";
+				ctx.fillStyle = "#FFFFFF";
 			} else if (nearest !== null && nearest.node !== null && nearest.node.id === node.id) {
-				ctx.fillStyle = "#EEEEEE";
+				ctx.fillStyle = "#FFFFFF";
 			} else {
 				ctx.fillStyle = "#FFFFFF";
 			}
