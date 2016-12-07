@@ -27,7 +27,7 @@ Copyright (c) 2010 Dennis Hotson
 
 jQuery.fn.springy = function(params) {
 	var graph = this.graph = params.graph || new Springy.Graph();
-	var nodeFont = "12px Verdana, sans-serif";
+	var nodeFont = "14px Verdana, sans-serif";
 	var edgeFont = "8px Verdana, sans-serif";
 	var stiffness = params.stiffness || 400.0;
 	var repulsion = params.repulsion || 400.0;
@@ -227,7 +227,7 @@ jQuery.fn.springy = function(params) {
 				intersection = s2;
 			}
 
-			var stroke = (edge.data.color !== undefined) ? edge.data.color : '#000000';
+			var stroke = (edge.data.color !== undefined) ? edge.data.color : '#CCCCCC';
 
 			var arrowWidth;
 			var arrowLength;
