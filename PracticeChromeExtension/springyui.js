@@ -80,19 +80,13 @@ jQuery.fn.springy = function(params) {
 	var nearest = null;
 	var dragged = null;
 	var nodeDragged = false;
+	var mousepressed = false;
 
 	jQuery(canvas).mousedown(function(e) {
 		var pos = jQuery(this).offset();
 		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
-		selected = nearest = dragged = layout.nearest(p);
-
-		if (selected.node !== null) {
-			dragged.point.m = 10000.0;
-
-			if (nodeSelected) {
-				nodeSelected(selected.node);
-			}
-		}
+		mousepressed = true;
+		selected = nearest = layout.nearest(p);
 
 		renderer.start();
 	});
@@ -108,20 +102,21 @@ jQuery.fn.springy = function(params) {
 		}
 	});
 
-	// jQuery(canvas).click(function(e) {
-		// var pos = jQuery(this).offset();
-		// var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
-		// selected = layout.nearest(p);
-		// node = selected.node;
-		// if (node && node.data && node.data.onclick && !nodeDragged) {
-			// node.data.onclick();
-		// }
-	// });
-
 	jQuery(canvas).mousemove(function(e) {
 		var pos = jQuery(this).offset();
 		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
 		
+		if (mousepressed) {
+			dragged = layout.nearest(p);
+			if (selected.node !== null) {
+				dragged.point.m = 10000.0;
+
+				if (nodeSelected) {
+					nodeSelected(selected.node);
+				}
+			}
+		}
+
 		nearest = layout.nearest(p);
 
 		if (dragged !== null && dragged.node !== null) {
@@ -143,11 +138,14 @@ jQuery.fn.springy = function(params) {
 			selected.node.data.onclick();
 		}
 		
+		mousepressed = false;
+		nodeDragged = false;
 	});
 
 	jQuery(window).bind('mouseup',function(e) {
 		
 		dragged = null;
+		mousepressed = false;
 		nodeDragged = false;
 	});
 
