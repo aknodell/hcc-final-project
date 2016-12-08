@@ -7,7 +7,11 @@ var marginElems = ['content', 'footer'];
 var pageInformation = {title:"", url:""};
 
 var ext = document.createElement("div");
+var kTitle = document.createElement("div");
+var kContent = document.createTextNode("Knowledge Graph");
 var kGraph = document.createElement("div");
+var aTitle = document.createElement("div");
+var aContent = document.createTextNode("Annotations");
 var anno = document.createElement("div");
 var addNoteDiv = document.createElement("div");
 var noteTextarea = document.createElement("textarea");
@@ -26,7 +30,7 @@ window.onload = function() {
             (function () {
                 var currentIndex = i;
                 var node = graph.nodes[currentIndex];
-                node.data.ondoubleclick = 
+                node.data.onclick = 
                         function() { document.location.href = node.data.url; };            
             })();
         }
@@ -82,12 +86,22 @@ function buildExtension() {
     document.body.appendChild(ext);
     ext.id = "extension";
     ext.className = "extension";
-
+	
+	kTitle.appendChild(kContent);
+	ext.appendChild(kTitle);
+	kTitle.id = "Knowlege-Title"
+	kTitle.className = "section-title"
+	
     ext.appendChild(kGraph);
     kGraph.id = "knowledge-graph";
     kGraph.className = "knowledge-graph";
     kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="610" height="420" />';
-
+	
+	aTitle.appendChild(aContent);
+	ext.appendChild(aTitle);
+	aTitle.id = "Anno-Title"
+	aTitle.className = "section-title"
+	
     ext.appendChild(anno);
     anno.id = "annotations";
     anno.className = "annotations";

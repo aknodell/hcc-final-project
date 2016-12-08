@@ -3,6 +3,7 @@
     background-color: white;
     height: 100%;
     position: fixed;
+	padding-top: 20px;
     top: 0px;
     right: 0px;
     border-left: 1px solid #a7d7f9;
@@ -11,6 +12,13 @@
 
 .knowledge-graph {
     margin-left: 20px;
+}
+
+.section-title {
+	margin-left: 20px;
+	color: #000;
+    font-family: lato;
+    font-size: 150%;
 }
 
 .annotations {

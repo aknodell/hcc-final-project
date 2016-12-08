@@ -79,6 +79,7 @@ jQuery.fn.springy = function(params) {
 	var selected = null;
 	var nearest = null;
 	var dragged = null;
+	var nodeDragged = false;
 
 	jQuery(canvas).mousedown(function(e) {
 		var pos = jQuery(this).offset();
@@ -107,21 +108,47 @@ jQuery.fn.springy = function(params) {
 		}
 	});
 
+	// jQuery(canvas).click(function(e) {
+		// var pos = jQuery(this).offset();
+		// var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
+		// selected = layout.nearest(p);
+		// node = selected.node;
+		// if (node && node.data && node.data.onclick && !nodeDragged) {
+			// node.data.onclick();
+		// }
+	// });
+
 	jQuery(canvas).mousemove(function(e) {
 		var pos = jQuery(this).offset();
 		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
+		
 		nearest = layout.nearest(p);
 
 		if (dragged !== null && dragged.node !== null) {
+			nodeDragged = true
 			dragged.point.p.x = p.x;
 			dragged.point.p.y = p.y;
 		}
 
 		renderer.start();
 	});
+	
+	jQuery(canvas).mouseup(function(e) {
+		var selectedPos = toScreen(selected.point.p);
+		var pos = jQuery(this).offset();
+		var p = {x: e.pageX - pos.left, y: e.pageY - pos.top};
+		
+		if (!nodeDragged && Math.abs(selectedPos.x - p.x) < (selected.node.getWidth()/2) && 
+				Math.abs(selectedPos.y - p.y) < (selected.node.getHeight()/2)) {
+			selected.node.data.onclick();
+		}
+		
+	});
 
 	jQuery(window).bind('mouseup',function(e) {
+		
 		dragged = null;
+		nodeDragged = false;
 	});
 
 	var getTextWidth = function(node) {
@@ -324,7 +351,7 @@ jQuery.fn.springy = function(params) {
 				ctx.textAlign = "left";
 				ctx.textBaseline = "top";
 				ctx.font = (node.data.font !== undefined) ? node.data.font : nodeFont;
-				ctx.fillStyle = (node.data.color !== undefined) ? node.data.color : "#000000";
+				ctx.fillStyle = (node.data.color !== undefined) ? node.data.color : "#0645ad";
 				var text = (node.data.label !== undefined) ? strip(node.data.label) : node.id;
 				ctx.fillText(text, s.x - contentWidth/2, s.y - contentHeight/2);
 			} else {
