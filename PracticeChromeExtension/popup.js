@@ -159,7 +159,7 @@ function addAnnotation() {
 
         
         saveBtn.className = "btn";
-        saveBtn.style.marginLeft = "501px";
+        saveBtn.style.marginLeft = "485px";
         saveBtn.innerHTML = "Save";
         saveBtn.onclick = function() { 
             saveAnnotation(window.annoText.trim(), noteTa.value.trim()); 
