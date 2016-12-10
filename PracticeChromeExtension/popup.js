@@ -12,6 +12,7 @@ var kContent = document.createTextNode("Knowledge Graph");
 var kGraph = document.createElement("div");
 var aTitle = document.createElement("div");
 var aContent = document.createTextNode("Annotations");
+var collapseAnn = document.createElement("span");
 var anno = document.createElement("div");
 var addNoteDiv = document.createElement("div");
 var noteTextarea = document.createElement("textarea");
@@ -101,6 +102,13 @@ function buildExtension() {
 	ext.appendChild(aTitle);
 	aTitle.id = "Anno-Title"
 	aTitle.className = "section-title"
+    
+    collapseAnn.className = "btn-link";
+    ext.appendChild(document.createTextNode("["));
+    collapseAnn.innerHTML = "Hide";
+    collapseAnn.onclick = function() { collapseAnnotations(); };
+    ext.appendChild(collapseAnn);
+    ext.appendChild(document.createTextNode("]"));
 	
     ext.appendChild(anno);
     anno.id = "annotations";
@@ -224,4 +232,31 @@ function addAnnotationDiv(quote, note) {
 
 function clearNote() {
     noteTextarea.value = "";
+}
+
+function collapseAnnotations() {
+    // console.log("collapse");
+    if (collapseAnn.innerHTML == "Hide") {
+        anno.style.display = "none";
+        anno.style.height = "0%";
+        // console.log(anno.childNodes)
+        // for (node in anno.childNodes)
+        // {
+            // node.style.height = "0%";
+        // }
+        kGraph.style.height = "750px";
+        document.getElementById("springydemo").setAttribute("height", "740");
+        collapseAnn.innerHTML = "Show";
+        // kGraph.innerHTML = '<canvas id="springydemo" class="canvas" width="610" height="690" />'
+    } else {
+        anno.style.display = "block";
+        anno.style.height = null;
+        // for (node in anno.childNodes)
+        // {
+            // node.style.height = null;
+        // }
+        kGraph.style.height = "430px";
+        document.getElementById("springydemo").setAttribute("height", "420");
+        collapseAnn.innerHTML = "Hide";
+    }
 }

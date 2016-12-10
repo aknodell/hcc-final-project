@@ -12,18 +12,22 @@
 
 .knowledge-graph {
     margin-left: 20px;
+    transition: height 1s;
 }
 
 .section-title {
 	margin-left: 20px;
+    margin-right:20px;
 	color: #000;
     font-family: lato;
     font-size: 150%;
+    display: inline-block;
 }
 
 .annotations {
     margin-left: 20px;
     margin-top: 0.25em;
+    /* transition: visibility 1s; */
 }
 
 .add-note-container {
@@ -42,6 +46,15 @@
 
 .btn:hover {
     cursor: pointer;
+}
+
+.btn-link {
+    color: #0645ad;
+}
+
+.btn-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .note-ta {
